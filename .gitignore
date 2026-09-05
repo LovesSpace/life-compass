@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build output
+frontend/dist/
+
+# Environment / secrets
+.env
+.env.*
+*serviceAccount*.json
+*-key.json
+
+# Logs
+npm-debug.log*
+*.log
+
+# Editor / OS
+.DS_Store
+.vscode/

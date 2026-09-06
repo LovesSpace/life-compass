@@ -6,7 +6,7 @@
  * automatically invalidated on the next request.
  */
 
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 const LIMITS = {
   // Two independent bounds on the analysis window. Entry count alone does
@@ -17,6 +17,7 @@ const LIMITS = {
   maxThemes: 5,
   maxProgress: 4,
   maxFieldChars: 400,
+  maxSummaryChars: 600,
 };
 
 // Even when nothing has changed, refresh once a day so the output does not
@@ -55,14 +56,16 @@ function validateIntelligence(raw) {
   const currentFocus = clampString(raw.currentFocus);
   const recurringThemes = clampStringArray(raw.recurringThemes, LIMITS.maxThemes);
   const progress = clampStringArray(raw.progress, LIMITS.maxProgress);
+  const summary = clampString(raw.summary, LIMITS.maxSummaryChars);
   const reflectionPrompt = clampString(raw.reflectionPrompt);
 
-  if (!currentFocus || !reflectionPrompt) return null;
+  if (!currentFocus || !summary || !reflectionPrompt) return null;
 
   return {
     currentFocus,
     recurringThemes,
     progress,
+    summary,
     reflectionPrompt,
   };
 }

@@ -5,6 +5,26 @@ import {
 } from "firebase/auth";
 import { auth } from "./firebase";
 
+/*
+ * Firebase returns messages like "Firebase: Error (auth/wrong-password)."
+ * Users should not have to read those.
+ */
+function readableError(code, fallback) {
+  const map = {
+    "auth/invalid-email": "That doesn't look like an email address.",
+    "auth/invalid-credential": "That email and password don't match.",
+    "auth/wrong-password": "That email and password don't match.",
+    "auth/user-not-found": "No account with that email yet. Create one below.",
+    "auth/email-already-in-use": "That email already has an account. Sign in instead.",
+    "auth/weak-password": "Use at least six characters.",
+    "auth/too-many-requests": "Too many attempts. Wait a minute and try again.",
+    "auth/network-request-failed": "Couldn't reach the network. Check your connection.",
+    "auth/unauthorized-domain": "This address isn't authorised in Firebase yet.",
+  };
+
+  return map[code] || fallback || "Something went wrong. Try again.";
+}
+
 function Auth({ onAuthenticated }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,77 +32,83 @@ function Auth({ onAuthenticated }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  async function handleSubmit(event) {
+    event.preventDefault();
 
     setError("");
     setLoading(true);
 
     try {
-      let result;
-
-      if (isSignup) {
-        result = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-      } else {
-        result = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-      }
+      const result = isSignup
+        ? await createUserWithEmailAndPassword(auth, email, password)
+        : await signInWithEmailAndPassword(auth, email, password);
 
       onAuthenticated(result.user);
     } catch (err) {
-      setError(err.message);
+      setError(readableError(err.code, err.message));
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
-    <div>
-      <h1>Life Compass</h1>
+    <div className="auth">
+      <div className="auth-card">
+        <h1>Life Compass</h1>
 
-      <h2>{isSignup ? "Create your account" : "Welcome back"}</h2>
+        <p className="auth-lede">
+          A journal that notices what keeps coming back, and remembers only
+          what you tell it to.
+        </p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <form onSubmit={handleSubmit}>
+          <input
+            className="field"
+            type="email"
+            placeholder="Email"
+            autoComplete="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength={6}
-        />
+          <input
+            className="field"
+            type="password"
+            placeholder="Password"
+            autoComplete={isSignup ? "new-password" : "current-password"}
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+            minLength={6}
+          />
 
-        <button type="submit" disabled={loading}>
-          {loading
-            ? "Please wait..."
-            : isSignup
-              ? "Create Account"
-              : "Login"}
-        </button>
-      </form>
+          <button className="btn" type="submit" disabled={loading}>
+            {loading
+              ? "One moment…"
+              : isSignup
+                ? "Create account"
+                : "Sign in"}
+          </button>
+        </form>
 
-      {error && <p>{error}</p>}
+        {error && <p className="notice">{error}</p>}
 
-      <button onClick={() => setIsSignup(!isSignup)}>
-        {isSignup
-          ? "Already have an account? Login"
-          : "Create an account"}
-      </button>
+        <div className="auth-switch">
+          <button
+            type="button"
+            className="btn-bare"
+            onClick={() => {
+              setIsSignup(!isSignup);
+              setError("");
+            }}
+          >
+            {isSignup
+              ? "I already have an account"
+              : "Create an account"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

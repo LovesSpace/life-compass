@@ -30,14 +30,17 @@ Shape:
   "currentFocus": "one or two sentences on what currently occupies them",
   "recurringThemes": ["short phrase", "..."],
   "progress": ["one observation about what has shifted over time", "..."],
+  "summary": "two or three sentences giving a high-level read on the recent journal",
   "reflectionPrompt": "one open question that would help them go deeper"
 }
 
 Rules:
 - At most ${LIMITS.maxThemes} recurringThemes and ${LIMITS.maxProgress} progress items.
-- Each string under ${LIMITS.maxFieldChars} characters.
+- Each string under ${LIMITS.maxFieldChars} characters, except summary which may run to ${LIMITS.maxSummaryChars}.
+- recurringThemes are short readable labels like "Work & career", not single words.
 - Do not quote the entries back. Summarise in your own words.
-- Be specific and warm. Never diagnose or give medical advice.
+- Be specific and warm. Describe what the entries show.
+- Never diagnose, never give medical or psychological judgments.
 
 Entries:
 ${numbered}`;
@@ -68,6 +71,8 @@ async function analyze(entries) {
       currentFocus: "You haven't written anything yet.",
       recurringThemes: [],
       progress: [],
+      summary:
+        "There is nothing to read yet. Write a few reflections and this overview will fill in.",
       reflectionPrompt: "What's occupying your mind right now?",
     };
   }

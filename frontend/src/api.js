@@ -27,10 +27,13 @@ async function authenticatedRequest(path, options = {}) {
   return data;
 }
 
-export async function createJournalEntry(content) {
+export async function createJournalEntry(
+  content,
+  { mood, entryDate, media } = {}
+) {
   return authenticatedRequest("/api/journal", {
     method: "POST",
-    body: JSON.stringify({ content }),
+    body: JSON.stringify({ content, mood, entryDate, media }),
   });
 }
 

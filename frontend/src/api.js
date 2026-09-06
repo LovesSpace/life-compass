@@ -38,12 +38,17 @@ export async function getJournalEntries() {
   return authenticatedRequest("/api/journal");
 }
 
-export async function sendChatMessage(message, conversationId = null) {
+export async function sendChatMessage(
+  message,
+  conversationId = null,
+  { isPrivate = false } = {}
+) {
   return authenticatedRequest("/api/chat", {
     method: "POST",
     body: JSON.stringify({
       message,
       conversationId,
+      isPrivate,
     }),
   });
 }
@@ -75,6 +80,12 @@ export async function getMemories() {
 
 export async function deleteMemory(memoryId) {
   return authenticatedRequest(`/api/memories/${memoryId}`, {
+    method: "DELETE",
+  });
+}
+
+export async function clearAllMemories() {
+  return authenticatedRequest("/api/memories", {
     method: "DELETE",
   });
 }

@@ -114,6 +114,46 @@ router.get("/", authenticateUser, async (req, res) => {
   }
 });
 
+// Delete every memory for this user
+router.delete("/", authenticateUser, async (req, res) => {
+  try {
+    const uid = req.user.uid;
+
+    const collectionRef = db
+      .collection("users")
+      .doc(uid)
+      .collection("memories");
+
+    let deleted = 0;
+
+    // Delete in batches so a large collection does not blow the 500-write
+    // limit on a single batch.
+    for (;;) {
+      const snapshot = await collectionRef.limit(400).get();
+
+      if (snapshot.empty) break;
+
+      const batch = db.batch();
+
+      snapshot.docs.forEach((doc) => batch.delete(doc.ref));
+
+      await batch.commit();
+
+      deleted += snapshot.size;
+    }
+
+    res.json({
+      deleted,
+    });
+  } catch (error) {
+    console.error("Clear memories error:", error);
+
+    res.status(500).json({
+      error: "Failed to clear memories",
+    });
+  }
+});
+
 // Delete a memory
 router.delete("/:memoryId", authenticateUser, async (req, res) => {
   try {

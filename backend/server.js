@@ -82,6 +82,9 @@ app.use((req, res, next) => {
 });
 
 // 7. Start Server
-app.listen(8080, "0.0.0.0", () => {
-  console.log("Life Compass backend running on port 8080");
+// Cloud Run injects PORT. Default to 8080 for local development.
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Life Compass backend running on port ${PORT}`);
 });

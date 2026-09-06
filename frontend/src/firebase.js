@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: "AIzaSyCi8ouKqSkT-K4lqJp8pgDcvQbnVrdFgx4",
+  authDomain: "life-compass-507705.firebaseapp.com",
+  projectId: "life-compass-507705",
+  storageBucket: "life-compass-507705.firebasestorage.app",
+  messagingSenderId: "328224107086",
+  appId: "1:328224107086:web:512fcecb461c7d22e9711f"
 };
 
 const app = initializeApp(firebaseConfig);

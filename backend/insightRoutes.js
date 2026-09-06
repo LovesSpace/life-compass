@@ -1,9 +1,46 @@
 const express = require("express");
 const { getFirestore } = require("firebase-admin/firestore");
 const { authenticateUser } = require("./authMiddleware");
+const { getJournalIntelligence } = require("./journalIntelligence");
 
 const router = express.Router();
 const db = getFirestore();
+
+/*
+ * Journal Intelligence
+ *
+ * Structured analysis of the user's recent journal entries.
+ * Cached in Firestore and keyed by a fingerprint of the entries, so
+ * repeated page loads never re-run the analysis.
+ *
+ * Pass ?refresh=true to bypass the cache.
+ */
+router.get("/journal-intelligence", authenticateUser, async (req, res) => {
+  try {
+    const result = await getJournalIntelligence(req.user.uid, {
+      forceRefresh: req.query.refresh === "true",
+    });
+
+    res.json({
+      status: "ok",
+      intelligence: result.intelligence,
+      entriesAnalyzed: result.entriesAnalyzed,
+      meta: {
+        generatedAt: result.generatedAt
+          ? result.generatedAt.toISOString()
+          : null,
+        fromCache: result.fromCache,
+        analyzer: result.analyzer,
+      },
+    });
+  } catch (error) {
+    console.error("Journal intelligence error:", error);
+
+    res.status(500).json({
+      error: "Failed to generate journal intelligence",
+    });
+  }
+});
 
 router.get("/what-changed", authenticateUser, async (req, res) => {
   try {

@@ -82,3 +82,11 @@ export async function deleteMemory(memoryId) {
 export async function getWhatChanged() {
   return authenticatedRequest("/api/insights/what-changed");
 }
+
+export async function getJournalIntelligence({ refresh = false } = {}) {
+  const path = refresh
+    ? "/api/insights/journal-intelligence?refresh=true"
+    : "/api/insights/journal-intelligence";
+
+  return authenticatedRequest(path);
+}

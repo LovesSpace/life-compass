@@ -42,7 +42,7 @@ app.get("/api/me", authenticateUser, (req, res) => {
   });
 });
 
-app.get("/api/test-gemini", async (req, res) => {
+app.get("/api/test-gemini", authenticateUser, async (req, res) => {
   try {
     const response = await generateGeminiResponse(
       "Reply with exactly: Life Compass Gemini connection successful."

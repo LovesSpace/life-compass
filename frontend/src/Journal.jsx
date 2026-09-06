@@ -191,10 +191,7 @@ function Journal() {
       <div className="page-head">
         <h1>Your Journal</h1>
         <p>
-          A space to reflect, process, and be yourself.
-          <br />
-          Write freely — nothing here is remembered by the AI unless you ask
-          it to be.
+          Write freely — A space to reflect, process, and be yourself.
         </p>
       </div>
 
@@ -317,10 +314,6 @@ function Journal() {
             {!saving && <ArrowIcon />}
           </button>
         </div>
-
-        <p className="save-note">
-          Save your reflection and keep your journey going.
-        </p>
       </form>
 
       <div className="encourage">

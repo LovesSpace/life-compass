@@ -166,9 +166,8 @@ function Chat({ memories, onMemorySaved }) {
       <div className="page-head">
         <h1>Let&rsquo;s talk</h1>
         <p>
-          Share what&rsquo;s on your mind, ask a question, or just reflect.
+          Share your thoughts, ask questions, and reflect with Life Compass.
           <br />
-          Life Compass is here to listen and help you gain clarity.
         </p>
       </div>
 

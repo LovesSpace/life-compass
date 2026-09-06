@@ -4,6 +4,7 @@ import { auth } from "./firebase";
 import Auth from "./Auth";
 import Journal from "./Journal";
 import Chat from "./Chat";
+import Memories from "./Memories";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -33,7 +34,10 @@ function App() {
       <p>Logged in as: {user.email}</p>
 
       <Journal />
+
       <Chat />
+      
+      <Memories />
 
       <button onClick={() => signOut(auth)}>
         Logout

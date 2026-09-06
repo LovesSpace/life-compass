@@ -51,3 +51,34 @@ export async function sendChatMessage(message, conversationId = null) {
 export async function getConversation(conversationId) {
   return authenticatedRequest(`/api/chat/${conversationId}`);
 }
+
+export async function createMemory(
+  content,
+  reason,
+  source = "manual",
+  sourceId = null
+) {
+  return authenticatedRequest("/api/memories", {
+    method: "POST",
+    body: JSON.stringify({
+      content,
+      reason,
+      source,
+      sourceId,
+    }),
+  });
+}
+
+export async function getMemories() {
+  return authenticatedRequest("/api/memories");
+}
+
+export async function deleteMemory(memoryId) {
+  return authenticatedRequest(`/api/memories/${memoryId}`, {
+    method: "DELETE",
+  });
+}
+
+export async function getWhatChanged() {
+  return authenticatedRequest("/api/insights/what-changed");
+}

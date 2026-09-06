@@ -23,6 +23,8 @@ const db = getFirestore();
 const { authenticateUser } = require("./authMiddleware");
 const journalRoutes = require("./journalRoutes");
 const chatRoutes = require("./chatRoutes");
+const memoryRoutes = require("./memoryRoutes");
+const insightRoutes = require("./insightRoutes");
 
 // 5. API Endpoints
 app.get("/api/health", (req, res) => {
@@ -62,6 +64,9 @@ app.get("/api/test-gemini", async (req, res) => {
 
 app.use("/api/journal", journalRoutes);
 app.use("/api/chat", chatRoutes);
+app.use("/api/memories", memoryRoutes);
+app.use("/api/insights", insightRoutes);
+
 
 // 6. Serve React Frontend Static Files
 const frontendPath = path.join(__dirname, "../frontend/dist");
